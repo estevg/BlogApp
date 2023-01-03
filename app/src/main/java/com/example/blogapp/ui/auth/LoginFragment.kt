@@ -3,30 +3,26 @@ package com.example.blogapp.ui.auth
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.blogapp.R
 import com.example.blogapp.core.Resource
-import com.example.blogapp.data.remote.auth.LoginDataSource
+import com.example.blogapp.data.remote.auth.AuthDataSource
 import com.example.blogapp.databinding.FragmentLoginBinding
-import com.example.blogapp.databinding.PostItemViewBinding
-import com.example.blogapp.domain.auth.LoginRepo
-import com.example.blogapp.domain.auth.LoginRepoImpl
-import com.example.blogapp.presentation.auth.LoginScreenViewModel
-import com.example.blogapp.presentation.auth.LoginScreenViewModelFactory
+import com.example.blogapp.domain.auth.AuthRepoImpl
+import com.example.blogapp.presentation.auth.AuthViewModel
+import com.example.blogapp.presentation.auth.AuthViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val viewModel by viewModels<LoginScreenViewModel> {
-        LoginScreenViewModelFactory(LoginRepoImpl(LoginDataSource()))
+    private val viewModel by viewModels<AuthViewModel> {
+        AuthViewModelFactory(AuthRepoImpl(AuthDataSource()))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
