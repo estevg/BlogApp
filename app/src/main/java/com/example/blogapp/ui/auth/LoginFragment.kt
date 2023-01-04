@@ -34,7 +34,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
 
-    private fun goToSignUpPage(){
+    private fun goToSignUpPage() {
         binding.textSignup.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
@@ -42,8 +42,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
 
     private fun isUserLoggedIn() {
-        firebaseAuth.currentUser?.let {
-            findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+        firebaseAuth.currentUser?.let { user ->
+            if (user.displayName.isNullOrEmpty()) {
+                findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
+            } else {
+                findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+            }
         }
     }
 
@@ -70,21 +74,33 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun signIn(email: String, password: String) {
         viewModel.signIn(email, password).observe(viewLifecycleOwner, Observer { result ->
-            when(result){
+            when (result) {
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.btnSignin.isEnabled = false
                 }
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
-                    Toast.makeText(requireContext(), "Welcome ${result.data?.email}", Toast.LENGTH_LONG).show()
+                    if (result.data?.displayName.isNullOrEmpty()) {
+                        findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
+                    } else {
+                        findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+                    }
+                    Toast.makeText(
+                        requireContext(),
+                        "Welcome ${result.data?.email}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 is Resource.Failure -> {
                     binding.btnSignin.isEnabled = true
                     binding.progressBar.visibility = View.GONE
                     Log.d("Error Firebase", "Error: ${result.exception.message}")
-                    Toast.makeText(requireContext(), result.exception.message.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        result.exception.message.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         })
