@@ -8,7 +8,7 @@ data class Post(
     val profile_picture: String = "",
     val profile_name: String = "",
     @ServerTimestamp
-    var create_at: Date? = null,
+    var created_at: Date? = null,
     val post_image: String = "",
     val post_description: String = "",
     val uid: String = ""

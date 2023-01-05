@@ -1,6 +1,7 @@
 package com.example.blogapp.ui.home.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +41,8 @@ class HomeScreenAdapter(private val postList: List<Post>) :
             } else {
                 binding.postDescription.text = item.post_description
             }
-            val createAt = item.create_at?.time?.div(1000L)?.let {
+
+            val createAt = item.created_at?.time?.div(1000L)?.let {
                 TimeUtils.getTimeAgo(it.toInt())
             }
             binding.postTimestamp.text = createAt
