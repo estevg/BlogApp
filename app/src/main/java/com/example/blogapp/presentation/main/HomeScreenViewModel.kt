@@ -3,6 +3,7 @@ package com.example.blogapp.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.example.blogapp.core.Resource
 import com.example.blogapp.domain.home.HomeScreenRepo
 import kotlinx.coroutines.Dispatchers
@@ -16,11 +17,20 @@ class HomeScreenViewModel(private val repo: HomeScreenRepo): ViewModel() {
         kotlin.runCatching {
             repo.getLatestPost()
         }.onSuccess { flowList ->
-            flowList.collect {
-                emit(it)
-            }
+            emit(flowList)
         }.onFailure { throwable ->
             emit(Resource.Failure(Exception(throwable.message)))
+        }
+    }
+
+    fun registerLikeButtonState(postId: String, liked: Boolean) = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
+        kotlin.runCatching {
+            repo.registerLikeButtonState(postId, liked)
+        }.onSuccess {
+            emit(Resource.Success(Unit))
+        }.onFailure {
+            emit(Resource.Failure(Exception(it.message)))
+
         }
     }
 }

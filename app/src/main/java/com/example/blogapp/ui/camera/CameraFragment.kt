@@ -13,11 +13,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.blogapp.R
 import com.example.blogapp.core.PermissionRequester
 import com.example.blogapp.core.Resource
 import com.example.blogapp.core.TakePicture
+import com.example.blogapp.core.hideKeyboard
 import com.example.blogapp.data.remote.camera.CameraScreenDataSource
 import com.example.blogapp.databinding.FragmentCameraBinding
 import com.example.blogapp.domain.camera.CameraScreenImpl
@@ -50,6 +53,11 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         imageView = binding.postImage
         getTakePicture()
 
+        binding.root.setOnClickListener {
+            it.hideKeyboard()
+        }
+
+
         binding.btnUploadPhoto.setOnClickListener {
             val description = binding.postDescription.text.toString().trim()
             bitmap?.let { image ->
@@ -63,6 +71,12 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                             ).show()
                         }
                         is Resource.Success -> {
+
+/*
+                            val navOptions = NavOptions.Builder().setPopUpTo(R.id.cameraFragment, true).build()
+*/
+
+
                             findNavController().navigate(R.id.action_cameraFragment_to_homeScreenFragment)
                         }
                         is Resource.Failure -> {
