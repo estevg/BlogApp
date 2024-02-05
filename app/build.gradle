@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.example.blogapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.blogapp"
@@ -58,7 +58,12 @@ dependencies {
     // Play services coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
+    // Used for StateFlow
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
 
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
 
 
     implementation 'androidx.core:core-ktx:1.9.0'

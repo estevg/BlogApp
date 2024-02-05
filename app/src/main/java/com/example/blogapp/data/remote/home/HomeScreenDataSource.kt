@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -16,35 +17,12 @@ import kotlinx.coroutines.withContext
 class HomeScreenDataSource {
     suspend fun getLatestPost(): Resource<List<Post>> {
         val postList = mutableListOf<Post>()
-
-        withContext(Dispatchers.IO) {
-            val querySnaShot = FirebaseFirestore.getInstance().collection("posts")
-                .orderBy("created_at", Query.Direction.DESCENDING).get().await()
-
-
-            for (post in querySnaShot.documents) {
-                post.toObject(Post::class.java)?.let { fbPost ->
-
-                    val isLiked = FirebaseAuth.getInstance().currentUser?.let { safeUser ->
-                        isPostLiked(post.id, safeUser.uid)
-                    }
-
-                    fbPost.apply {
-                        created_at = post.getTimestamp(
-                            "created_at",
-                            DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
-                        )?.toDate()
-                        id = post.id
-
-                        if(isLiked != null){
-                            liked = isLiked
-                        }
-                    }
-
-                    postList.add(fbPost)
-                }
+        val querySnapshot = FirebaseFirestore.getInstance().collection("posts").get().await()
+        for(post in querySnapshot.documents){
+            post.toObject(Post::class.java)?.let { fbPost ->
+                fbPost.apply { created_at = post.getTimestamp("created_at", DocumentSnapshot.ServerTimestampBehavior.ESTIMATE)?.toDate() }
+                postList.add(fbPost)
             }
-
         }
         return Resource.Success(postList)
     }
