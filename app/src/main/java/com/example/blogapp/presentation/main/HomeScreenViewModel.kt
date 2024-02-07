@@ -58,7 +58,7 @@ class HomeScreenViewModel(private val repo: HomeScreenRepo): ViewModel() {
         }
     }
 
-    fun getPost(): StateFlow<Resource<List<Post>>> = posts
+    fun getPost() = posts
 
 
     fun registerLikeButtonState(postId: String, liked: Boolean) = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
