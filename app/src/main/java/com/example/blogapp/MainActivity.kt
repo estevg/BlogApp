@@ -27,6 +27,8 @@ import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
+    // Comentario de prueba
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
