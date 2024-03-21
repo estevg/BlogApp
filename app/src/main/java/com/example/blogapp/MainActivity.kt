@@ -31,6 +31,8 @@ import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
+    // Comentario de prueba
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
